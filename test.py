@@ -13,3 +13,4 @@ def test_operations():
     assert test_operations.resta(-4,-5) == -9
     assert test_operations.factorial(6) == 720
     assert test_operations.exponent(4,2) == 16
+    assert test_operations.exponent(4,2) == 16
