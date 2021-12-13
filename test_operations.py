@@ -29,7 +29,5 @@ def arrel(sum1,sum2):
     return sum1+sum2
 
 
-print(pow(4,2))
-
 
 
