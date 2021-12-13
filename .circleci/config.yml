@@ -1,5 +1,24 @@
-version: 2
+version: 2.1
+orbs:
+  node: circleci/node@3.0.0
 jobs:
   build:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:12.20.1
+    working_directory: /tmp/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run:
+          name: "Install NPM Packages"
+          command: "npm install"
+      - run:
+          name: "Print 'Hello World'"
+          command: "echo 'Hello World'"
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
