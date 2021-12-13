@@ -1,24 +1,26 @@
-version: 2.1
-orbs:
-  node: circleci/node@3.0.0
+# Python CircleCI 2.0 configuration file
+version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:12.20.1
-    working_directory: /tmp/repo
+      - image: circleci/python:3.7
+
+    working_directory: ~/repo
+
     steps:
+      # Step 1: obtain repo from GitHub
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
+      # Step 2: create virtual env and install dependencies
       - run:
-          name: "Install NPM Packages"
-          command: "npm install"
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+      # Step 3: run linter and tests
       - run:
-          name: "Print 'Hello World'"
-          command: "echo 'Hello World'"
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          name: run tests
+          command: |
+            . venv/bin/activate
+            flake8 --exclude=venv* --statistics
+            pytest -v --cov=calculator+-
